@@ -23,6 +23,19 @@ services: # docker compose expects
         - action: restart
           path: backend/src/
           # target: /app
+  # DATABASE_URL=postgresql+psycopg://dbuser:db-password@db_service:5432/mydb
+  db_service:
+    image: postgres:17.5
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=db-password
+      - POSTGRES_DB=mydb
+    # env_file:
+    #   - .env.sample-db
+    volumes:
+      - dc_managed_db_volume:/var/lib/postgresql/data
   static_html: # custom key name
     #image: python:3.13.4-slim-bullseye
     build:
@@ -34,3 +47,6 @@ services: # docker compose expects
     command: python -m http.server 8000
     volumes:
       - ./static_html/src:/app
+
+volumes:
+  dc_managed_db_volume:

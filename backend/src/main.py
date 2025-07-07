@@ -1,7 +1,17 @@
 import os
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
-app = FastAPI()
+from api.db import init_db
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # before app startup
+    init_db()
+    yield
+    # after app startup
+
+app = FastAPI(lifespan=lifespan)
 
 MY_PROJECT = os.environ.get("MY_PROJECT") or "This is my project"
 API_KEY = os.environ.get("API_KEY")
