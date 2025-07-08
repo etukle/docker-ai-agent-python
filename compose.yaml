@@ -10,6 +10,7 @@ services: # dockers compose expects
       - PORT=8000
       - MY_PROJECT=Hello World
     env_file:
+      - .env
       - .env.sample
     volumes:
       - ./backend/src:/app
